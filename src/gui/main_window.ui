@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.20.0 -->
+<interface>
+  <requires lib="gtk+" version="3.14"/>
+  <object class="GtkAboutDialog" id="about_dialog">
+    <property name="can_focus">False</property>
+    <property name="type">popup</property>
+    <property name="modal">True</property>
+    <property name="window_position">center</property>
+    <property name="destroy_with_parent">True</property>
+    <property name="type_hint">dialog</property>
+    <property name="gravity">center</property>
+    <property name="program_name">Receipt Keeper</property>
+    <property name="version">0.1.0</property>
+    <property name="copyright" translatable="yes">Copyright © 2016 Rafael Medina García</property>
+    <property name="website">https://github.com/rmed/receipt-keeper</property>
+    <property name="license" translatable="yes">Este programa viene SIN NINGUNA GARANTÍA.
+Consulte la &lt;a href="http://opensource.org/licenses/mit-license.php"&gt;La licencia MIT (MIT)&lt;/a&gt; para obtener más detalles.</property>
+    <property name="authors">Rafael Medina García</property>
+    <property name="logo_icon_name">image-missing</property>
+    <property name="wrap_license">True</property>
+    <property name="license_type">mit-x11</property>
+    <child internal-child="vbox">
+      <object class="GtkBox">
+        <property name="can_focus">False</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child internal-child="action_area">
+          <object class="GtkButtonBox">
+            <property name="can_focus">False</property>
+            <property name="layout_style">end</property>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkAdjustment" id="adjust_cost_from">
+    <property name="upper">999999</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="adjust_cost_to">
+    <property name="upper">999999</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkPopover" id="popover_date">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkCalendar" id="calendar">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="year">2016</property>
+        <property name="month">10</property>
+        <property name="day">29</property>
+        <signal name="day-selected" handler="calendar_day_selected" swapped="no"/>
+      </object>
+    </child>
+  </object>
+  <object class="GtkPopover" id="popover_menu">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkBox" id="menu_box">
+        <property name="visible">True</property>
+        <property name="can_focus">False</property>
+        <property name="margin_left">20</property>
+        <property name="margin_right">20</property>
+        <property name="margin_top">10</property>
+        <property name="margin_bottom">10</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">5</property>
+        <child>
+          <object class="GtkButton" id="btn_clear_search">
+            <property name="label" translatable="yes">Clear search</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="clear_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btn_settings">
+            <property name="label" translatable="yes">Settings</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="relief">none</property>
+            <signal name="clicked" handler="settings_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="btn_about">
+            <property name="label" translatable="yes">About</property>
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <property name="hexpand">True</property>
+            <property name="vexpand">True</property>
+            <property name="relief">none</property>
+            <signal name="activate" handler="about_clicked" swapped="no"/>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+            <property name="fill">True</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkHeaderBar" id="header_bar">
+    <property name="can_focus">False</property>
+    <property name="title">Receipt Keeper</property>
+    <property name="show_close_button">True</property>
+    <child>
+      <object class="GtkButton" id="btn_new">
+        <property name="can_focus">False</property>
+        <property name="receives_default">False</property>
+        <property name="tooltip_text" translatable="yes">New receipt</property>
+        <property name="always_show_image">True</property>
+        <signal name="clicked" handler="new_clicked" swapped="no"/>
+        <child>
+          <object class="GtkImage" id="img_new">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="icon_name">list-add-symbolic</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkButton" id="btn_remove">
+        <property name="visible">True</property>
+        <property name="sensitive">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Remove selected receipt</property>
+        <signal name="clicked" handler="remove_clicked" swapped="no"/>
+        <child>
+          <object class="GtkImage" id="img_remove">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="icon_name">user-trash-symbolic</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="position">1</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkButton" id="btn_edit">
+        <property name="visible">True</property>
+        <property name="sensitive">False</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Edit selected receipt</property>
+        <signal name="clicked" handler="edit_clicked" swapped="no"/>
+        <child>
+          <object class="GtkImage" id="img_edit">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="icon_name">document-properties-symbolic</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="position">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkMenuButton" id="btn_menu">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="popover">popover_menu</property>
+        <child>
+          <object class="GtkImage">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="icon_name">open-menu-symbolic</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="pack_type">end</property>
+        <property name="position">3</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkToggleButton" id="toggle_search">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="receives_default">True</property>
+        <property name="tooltip_text" translatable="yes">Toggle search</property>
+        <property name="always_show_image">True</property>
+        <signal name="toggled" handler="search_toggled" swapped="no"/>
+        <child>
+          <object class="GtkImage" id="img_search">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="icon_name">edit-find-symbolic</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="pack_type">end</property>
+        <property name="position">-1</property>
+      </packing>
+    </child>
+  </object>
+  <object class="GtkListStore" id="store_currency">
+    <columns>
+      <!-- column-name currency -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="store_table">
+    <columns>
+      <!-- column-name id -->
+      <column type="gint"/>
+      <!-- column-name shop -->
+      <column type="gchararray"/>
+      <!-- column-name cost -->
+      <column type="gfloat"/>
+      <!-- column-name currency -->
+      <column type="gchararray"/>
+      <!-- column-name type -->
+      <column type="gchararray"/>
+      <!-- column-name date -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="store_type">
+    <columns>
+      <!-- column-name payment -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkBox" id="main_box">
+    <property name="can_focus">False</property>
+    <property name="orientation">vertical</property>
+    <property name="spacing">10</property>
+    <child>
+      <object class="GtkRevealer" id="revealer">
+        <property name="can_focus">False</property>
+        <child>
+          <object class="GtkBox" id="search_box">
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkBox" id="search_shop_box">
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel" id="lbl_shop">
+                    <property name="can_focus">False</property>
+                    <property name="label">Shop</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">10</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry_shop">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="caps_lock_warning">False</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">True</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="search_cost_box">
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel" id="lbl_cost">
+                    <property name="can_focus">False</property>
+                    <property name="label">Cost</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">10</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbl_cost_from">
+                    <property name="can_focus">False</property>
+                    <property name="label">From</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">10</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="spin_cost_from">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="caps_lock_warning">False</property>
+                    <property name="adjustment">adjust_cost_from</property>
+                    <property name="digits">2</property>
+                    <property name="numeric">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbl_cost_to">
+                    <property name="can_focus">False</property>
+                    <property name="label">To</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">10</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="spin_cost_to">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="caps_lock_warning">False</property>
+                    <property name="adjustment">adjust_cost_to</property>
+                    <property name="digits">2</property>
+                    <property name="numeric">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="padding">5</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="search_date_box">
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel" id="lbl_date">
+                    <property name="can_focus">False</property>
+                    <property name="label">Date</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">10</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbl_date_from">
+                    <property name="can_focus">False</property>
+                    <property name="label">From</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">10</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry_date_from">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="caps_lock_warning">False</property>
+                    <property name="placeholder_text" translatable="yes">DD/MM/YYYY</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btn_date_from">
+                    <property name="can_focus">False</property>
+                    <property name="receives_default">False</property>
+                    <signal name="clicked" handler="choose_date_from_clicked" swapped="no"/>
+                    <child>
+                      <object class="GtkImage" id="img_date_from">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">x-office-calendar-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbl_date_to">
+                    <property name="can_focus">False</property>
+                    <property name="label">To</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">10</property>
+                    <property name="position">4</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry_date_to">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="placeholder_text" translatable="yes">DD/MM/YYYY</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">5</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkButton" id="btn_date_to">
+                    <property name="can_focus">False</property>
+                    <property name="receives_default">False</property>
+                    <signal name="clicked" handler="date_to_clicked" swapped="no"/>
+                    <child>
+                      <object class="GtkImage" id="img_date_to">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="icon_name">x-office-calendar-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">6</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="padding">5</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="search_payment_box">
+                <property name="can_focus">False</property>
+                <child>
+                  <object class="GtkLabel" id="lbl_type">
+                    <property name="can_focus">False</property>
+                    <property name="label">Type</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">10</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="combo_type">
+                    <property name="can_focus">False</property>
+                    <property name="model">store_type</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="render_type"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="padding">10</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="lbl_currency">
+                    <property name="can_focus">False</property>
+                    <property name="label">Currency</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="padding">10</property>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="combo_currency">
+                    <property name="can_focus">False</property>
+                    <property name="model">store_currency</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="render_currency"/>
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="padding">10</property>
+                    <property name="position">3</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="padding">5</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparator" id="separator">
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="padding">5</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">True</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow" id="scroll_table">
+        <property name="can_focus">False</property>
+        <property name="vexpand">True</property>
+        <property name="propagate_natural_width">True</property>
+        <property name="propagate_natural_height">True</property>
+        <child>
+          <object class="GtkTreeView" id="view_table">
+            <property name="can_focus">False</property>
+            <property name="model">store_table</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection" id="table_selection"/>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="column_id">
+                <property name="resizable">True</property>
+                <property name="title" translatable="yes">ID</property>
+                <property name="expand">True</property>
+                <property name="clickable">True</property>
+                <property name="alignment">0.5</property>
+                <property name="sort_indicator">True</property>
+                <property name="sort_column_id">0</property>
+                <child>
+                  <object class="GtkCellRendererText" id="render_id"/>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="column_shop">
+                <property name="resizable">True</property>
+                <property name="title" translatable="yes">Shop</property>
+                <property name="expand">True</property>
+                <property name="clickable">True</property>
+                <property name="alignment">0.5</property>
+                <property name="sort_column_id">1</property>
+                <child>
+                  <object class="GtkCellRendererText" id="render_shop">
+                    <property name="alignment">center</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">1</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="column_cost">
+                <property name="resizable">True</property>
+                <property name="title" translatable="yes">Cost</property>
+                <property name="expand">True</property>
+                <property name="clickable">True</property>
+                <property name="alignment">0.5</property>
+                <property name="sort_column_id">2</property>
+                <child>
+                  <object class="GtkCellRendererText" id="render_cost">
+                    <property name="alignment">center</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">2</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="column_currency">
+                <property name="resizable">True</property>
+                <property name="title" translatable="yes">Currency</property>
+                <property name="expand">True</property>
+                <property name="clickable">True</property>
+                <property name="alignment">0.5</property>
+                <property name="sort_column_id">3</property>
+                <child>
+                  <object class="GtkCellRendererText" id="render_currenc">
+                    <property name="alignment">center</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">3</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="column_type">
+                <property name="resizable">True</property>
+                <property name="title" translatable="yes">Type</property>
+                <property name="expand">True</property>
+                <property name="clickable">True</property>
+                <property name="alignment">0.5</property>
+                <property name="sort_column_id">4</property>
+                <child>
+                  <object class="GtkCellRendererText" id="render_type_table">
+                    <property name="alignment">center</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">4</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn" id="column_date">
+                <property name="resizable">True</property>
+                <property name="title" translatable="yes">Date</property>
+                <property name="expand">True</property>
+                <property name="clickable">True</property>
+                <property name="alignment">0.5</property>
+                <property name="sort_column_id">5</property>
+                <child>
+                  <object class="GtkCellRendererText" id="render_date">
+                    <property name="alignment">center</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">5</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">True</property>
+        <property name="fill">True</property>
+        <property name="padding">5</property>
+        <property name="position">1</property>
+      </packing>
+    </child>
+  </object>
+</interface>
