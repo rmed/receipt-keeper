@@ -41,7 +41,8 @@ use gtk::{
     RevealerTransitionType,
     Type,
     Window,
-    WindowPosition
+    WindowPosition,
+    WindowType
 };
 use gtk::{
     Button,
@@ -281,9 +282,8 @@ pub fn create_window(app: &Application,
         let builder = builder.clone();
         let btn_edit: Button = builder.get_object("btn_edit").unwrap();
 
+        let state = state.clone();
         let app = window.get_application().unwrap();
-        let statea = state.clone();
-        let stateb = state.clone();
         let table_selection: TreeSelection = builder.get_object("table_selection").unwrap();
 
         btn_edit.connect_clicked(move |_| {
@@ -291,14 +291,25 @@ pub fn create_window(app: &Application,
             let id = model.get_value(&iter, 0).get::<i32>().unwrap();
 
             let dialog: ApplicationWindow;
+            let mut exists = false;
+            let mut stored: Window = Window::new(WindowType::Toplevel); // Dummy
 
-            // Check if window is already running
-            let mut borrowed = stateb.borrow_mut();
+            {
+                // Check if window is already running
+                let borrowed = state.borrow();
 
-            if borrowed.window_map.contains_key(&id) {
+                if borrowed.window_map.contains_key(&id) {
+                    // Load stored window
+                    stored = app.get_window_by_id(
+                        *borrowed.window_map.get(&id).unwrap()
+                    ).unwrap();
+
+                    exists = true;
+                }
+            }
+
+            if exists {
                 // Bring window to front
-                let win_id = borrowed.window_map.get(&id).unwrap();
-                let stored = app.get_window_by_id(*win_id).unwrap();
                 unsafe {
                     dialog = mem::transmute::<Window, ApplicationWindow>(stored);
                 };
@@ -307,13 +318,12 @@ pub fn create_window(app: &Application,
 
             } else {
                 // Create new window and add it to the map
-                dialog = edit_window::create_window(&app, &statea, id);
+                dialog = edit_window::create_window(&app, &state, id);
 
-                borrowed.window_map.insert(id, dialog.get_id());
+                state.borrow_mut().window_map.insert(id, dialog.get_id());
 
                 dialog.show();
             }
-
         });
     }
 

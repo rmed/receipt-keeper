@@ -81,15 +81,13 @@ macro_rules! fill_store {
 pub fn create_window(app: &Application, state: &Rc<RefCell<State>>,
                      receipt_id: i32) -> ApplicationWindow {
     let mut title = "";
-    let state = state.clone();
     let mut is_modal = false;
     let receipt: Receipt;
 
+
     if receipt_id >= 0 {
         title = "Edit receipt";
-        // FIXME
-        receipt = db::get_receipt(&state.borrow().db_path, receipt_id).unwrap();
-        // receipt = Receipt::new();
+        receipt = db::get_receipt(state.borrow().db_path.as_str(), receipt_id).unwrap();
 
     } else {
         title = "New receipt";
@@ -123,6 +121,27 @@ pub fn create_window(app: &Application, state: &Rc<RefCell<State>>,
 
     let store_type: ListStore = builder.get_object("store_type").unwrap();
     fill_store!(store_type, PAYMENTS);
+
+    // Load data
+    if receipt_id >= 0 {
+        let entry_shop: Entry = builder.get_object("entry_shop").unwrap();
+        entry_shop.set_text(receipt.shop.as_str());
+
+        let entry_desc: TextView = builder.get_object("entry_desc").unwrap();
+        //TODO
+
+        let spin_cost: SpinButton = builder.get_object("spin_cost").unwrap();
+        spin_cost.set_value(receipt.amount);
+
+        let combo_type: ComboBox = builder.get_object("combo_type").unwrap();
+        //TODO
+
+        let combo_currency: ComboBox = builder.get_object("combo_currency").unwrap();
+        //TODO
+
+        let entry_date: Entry = builder.get_object("entry_date").unwrap();
+        entry_date.set_text(receipt.date_paid.format("%d/%m/%Y").to_string().as_str());
+    }
 
     // Events
 
