@@ -77,13 +77,27 @@ macro_rules! fill_store {
     }
 }
 
+/// Set combobox active element based on the value
+macro_rules! set_active_combo {
+    ($combo:ident, $list:ident, $value:ident) => {
+        let check: &str = $value.as_str();
+
+        for (index, val) in $list.into_iter().enumerate() {
+            if check == val.to_string() {
+                $combo.set_active(index as i32);
+                break;
+            }
+        }
+    }
+}
+
 /// Creates a view/edit dialog
 pub fn create_window(app: &Application, state: &Rc<RefCell<State>>,
                      receipt_id: i32) -> ApplicationWindow {
+
     let mut title = "";
     let mut is_modal = false;
     let receipt: Receipt;
-
 
     if receipt_id >= 0 {
         title = "Edit receipt";
@@ -94,7 +108,6 @@ pub fn create_window(app: &Application, state: &Rc<RefCell<State>>,
         is_modal = true;
         receipt = Receipt::new();
     }
-
 
     let window = ApplicationWindow::new(&app);
     window.set_title(title);
@@ -128,16 +141,19 @@ pub fn create_window(app: &Application, state: &Rc<RefCell<State>>,
         entry_shop.set_text(receipt.shop.as_str());
 
         let entry_desc: TextView = builder.get_object("entry_desc").unwrap();
-        //TODO
+        let desc_buffer = entry_desc.get_buffer().unwrap();
+        desc_buffer.set_text(receipt.description.as_str());
 
         let spin_cost: SpinButton = builder.get_object("spin_cost").unwrap();
         spin_cost.set_value(receipt.amount);
 
         let combo_type: ComboBox = builder.get_object("combo_type").unwrap();
-        //TODO
+        let payment_type = receipt.payment_type.clone();
+        set_active_combo!(combo_type, PAYMENTS, payment_type);
 
         let combo_currency: ComboBox = builder.get_object("combo_currency").unwrap();
-        //TODO
+        let currency = receipt.currency.clone();
+        set_active_combo!(combo_currency, CURRENCIES, currency);
 
         let entry_date: Entry = builder.get_object("entry_date").unwrap();
         entry_date.set_text(receipt.date_paid.format("%d/%m/%Y").to_string().as_str());
@@ -267,6 +283,24 @@ pub fn create_window(app: &Application, state: &Rc<RefCell<State>>,
             }
 
             //TODO check status and show infobar if error
+        });
+    }
+
+    // Window closed, remove from map if applicable
+    {
+        let window = window.clone();
+        let state = state.clone();
+        let receipt_id = receipt_id.clone();
+
+        window.connect_delete_event(move |_, _| {
+            let mut borrowed = state.borrow_mut();
+
+            if receipt_id >= 0 && borrowed.window_map.contains_key(&receipt_id) {
+                // Remove window
+                borrowed.window_map.remove(&receipt_id);
+            }
+
+            Inhibit(false)
         });
     }
 

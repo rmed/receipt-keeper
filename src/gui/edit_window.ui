@@ -27,6 +27,30 @@
       </object>
     </child>
   </object>
+  <object class="GtkPopover" id="popover_date">
+    <property name="can_focus">False</property>
+    <child>
+      <object class="GtkCalendar" id="calendar">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="year">2016</property>
+        <property name="month">10</property>
+        <property name="day">30</property>
+      </object>
+    </child>
+  </object>
+  <object class="GtkListStore" id="store_currency">
+    <columns>
+      <!-- column-name currency -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="store_type">
+    <columns>
+      <!-- column-name type -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkBox" id="main_box">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -226,7 +250,7 @@
                   <object class="GtkLabel" id="lbl_type">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Currency</property>
+                    <property name="label" translatable="yes">Type</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>
@@ -375,29 +399,5 @@
         <property name="position">1</property>
       </packing>
     </child>
-  </object>
-  <object class="GtkPopover" id="popover_date">
-    <property name="can_focus">False</property>
-    <child>
-      <object class="GtkCalendar" id="calendar">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="year">2016</property>
-        <property name="month">10</property>
-        <property name="day">30</property>
-      </object>
-    </child>
-  </object>
-  <object class="GtkListStore" id="store_currency">
-    <columns>
-      <!-- column-name currency -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
-  <object class="GtkListStore" id="store_type">
-    <columns>
-      <!-- column-name type -->
-      <column type="gchararray"/>
-    </columns>
   </object>
 </interface>
