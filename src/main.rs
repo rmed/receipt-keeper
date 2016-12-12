@@ -56,7 +56,10 @@ fn do_activate(app: &Application) {
 
     // Record ID -> Window ID
     // let mut window_map: HashMap<i32, u32> = HashMap::new();
-    // migrations::migrate("/tmp/test.db", 0);
+
+    // Migrate
+    let db_version = migrations::migrate("/tmp/test.db");
+    //TODO show error if -1
 
     // Add main window
     let window = main_window::create_window(&app, &state);

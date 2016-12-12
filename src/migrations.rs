@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+use rusqlite;
 use rusqlite::Connection;
 use db::open_connection;
 
@@ -27,12 +28,30 @@ use db::open_connection;
 ///
 /// Only migrations with a higher version number than the one in the database
 /// (default is -1) will be executed.
-pub fn migrate(db_path: &str, version: i32) {
+///
+/// Returns current migration in the database
+pub fn migrate(db_path: &str) -> i32 {
     let conn = open_connection(&db_path).unwrap();
+
+    // Find out version (default is -1)
+    let mut version: i32 = match get_version(&conn) {
+        Ok(v) => v,
+        Err(_) => -1
+    };
 
     if version < 1 {
         run_migration_ver1(&conn);
+        version = 1;
     }
+
+    version
+}
+
+/// Get current version in database
+fn get_version(conn: &Connection) -> rusqlite::Result<i32> {
+    conn.query_row("SELECT version FROM __revision", &[], |row| {
+        row.get(0)
+    })
 }
 
 /// Base migration that creates the database tables.
