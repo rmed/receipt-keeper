@@ -26,6 +26,7 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::mem;
 use std::rc::Rc;
+use std::thread;
 
 use gtk;
 use gtk::prelude::*;
@@ -326,7 +327,6 @@ pub fn create_window(app: &Application,
             }
         });
     }
-
 
     window
 }

@@ -25,6 +25,7 @@
 use std::collections::HashMap;
 use std::cell::RefCell;
 use std::rc::Rc;
+use std::sync::mpsc::{Receiver, Sender};
 
 use chrono::offset::local::Local;
 
@@ -33,10 +34,11 @@ use chrono::offset::local::Local;
 ///
 /// The window map is a HashMap that stores window IDs using
 /// Receipt ID as key
-#[derive(Clone)]
 pub struct State {
     pub db_path: String,
-    pub window_map: HashMap<i32, u32>
+    pub window_map: HashMap<i32, u32>,
+    pub sender: Sender<bool>,
+    pub receiver: Receiver<bool>
 }
 
 /// Date regular expression

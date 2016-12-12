@@ -36,6 +36,7 @@ mod gui;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::rc::Rc;
+use std::sync::mpsc;
 
 use gtk::prelude::*;
 use gtk::Application;
@@ -48,14 +49,14 @@ use gui::main_window;
 fn do_activate(app: &Application) {
     // Application state
     let db_path = config::read_config_file();
+    let (tx, rx) = mpsc::channel();
 
     let state: Rc<RefCell<State>> = Rc::new(RefCell::new(State {
         db_path: db_path,
-        window_map: HashMap::new()
+        window_map: HashMap::new(),
+        sender: tx,
+        receiver: rx
     }));
-
-    // Record ID -> Window ID
-    // let mut window_map: HashMap<i32, u32> = HashMap::new();
 
     // Migrate
     let db_version = migrations::migrate("/tmp/test.db");
