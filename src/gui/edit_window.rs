@@ -27,6 +27,7 @@ use std::os::raw::{c_int, c_double};
 use std::rc::Rc;
 
 use chrono::NaiveDate;
+use glib;
 use gtk;
 use gtk::prelude::*;
 use gtk::{
@@ -67,6 +68,7 @@ use regex::Regex;
 use common::{State, RE_DATE, CURRENCIES, PAYMENTS};
 use db;
 use db::Receipt;
+use gui::main_window;
 
 /// Fill combobox store
 macro_rules! fill_store {
@@ -283,6 +285,7 @@ pub fn create_window(app: &Application, state: &Rc<RefCell<State>>,
             }
 
             //TODO check status and show infobar if error
+            glib::idle_add(main_window::refresh_table);
         });
     }
 

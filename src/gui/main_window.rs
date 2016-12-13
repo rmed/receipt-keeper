@@ -28,6 +28,7 @@ use std::mem;
 use std::rc::Rc;
 use std::thread;
 
+use glib;
 use gtk;
 use gtk::prelude::*;
 use gtk::{
@@ -328,5 +329,36 @@ pub fn create_window(app: &Application,
         });
     }
 
+    // Store builder and database path in thread local storage
+    {
+        let builder = builder.clone();
+        let db_path = state.borrow().db_path.clone();
+
+        REFRESH.with(move |r| {
+            *r.borrow_mut() = Some((builder, db_path));
+        });
+    }
+
     window
 }
+
+/// Refresh the receipt table
+///
+/// This is usually done when adding or editing a receipt
+pub fn refresh_table() -> glib::Continue {
+    REFRESH.with(move |r| {
+        if let Some((ref builder, ref db_path)) = *r.borrow() {
+            let store_table: ListStore = builder.get_object("store_table").unwrap();
+
+            let receipts = db::get_all_receipts(&db_path).unwrap();
+            fill_store!(table => store_table, receipts);
+        }
+    });
+
+    glib::Continue(false)
+}
+
+// Keep builder in thread local storage to update the table
+thread_local!(
+    static REFRESH: RefCell<Option<(Builder, String)>> = RefCell::new(None);
+);
