@@ -72,32 +72,6 @@ use db;
 use db::Receipt;
 use gui::edit_window;
 
-/// Fill combobox and table stores
-macro_rules! fill_store {
-    (combo => $list:ident, $values:ident) => {
-        for (index, val) in $values.into_iter().enumerate() {
-            $list.insert_with_values(Some((index+1) as u32), &[0], &[val]);
-        }
-    };
-
-    (table => $list:ident, $values:ident) => {
-        $list.clear();
-
-        for (index, val) in $values.iter().enumerate() {
-            $list.insert_with_values(
-                None,
-                &[0, 1, 2, 3, 4, 5],
-                &[
-                    &val.id,
-                    &val.shop,
-                    &val.amount,
-                    &val.currency,
-                    &val.payment_type,
-                    &val.date_paid.to_string()
-                ]);
-        }
-    };
-}
 
 /// Creates the main window
 pub fn create_window(app: &Application,
@@ -241,7 +215,7 @@ pub fn create_window(app: &Application,
             // Hide menu
             popover_menu.hide();
 
-            // TODO refresh query
+            // TODO filter results
         });
     }
 

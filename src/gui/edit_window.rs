@@ -39,6 +39,7 @@ use gtk::{
     Dialog,
     DialogFlags,
     MessageType,
+    Revealer,
     Window,
     WindowPosition
 };
@@ -70,28 +71,6 @@ use db;
 use db::Receipt;
 use gui::main_window;
 
-/// Fill combobox store
-macro_rules! fill_store {
-    ($list:ident, $values:ident) => {
-        for (index, val) in $values.into_iter().enumerate() {
-            $list.insert_with_values(Some((index+1) as u32), &[0], &[val]);
-        }
-    }
-}
-
-/// Set combobox active element based on the value
-macro_rules! set_active_combo {
-    ($combo:ident, $list:ident, $value:ident) => {
-        let check: &str = $value.as_str();
-
-        for (index, val) in $list.into_iter().enumerate() {
-            if check == val.to_string() {
-                $combo.set_active(index as i32);
-                break;
-            }
-        }
-    }
-}
 
 /// Creates a view/edit dialog
 pub fn create_window(app: &Application, state: &Rc<RefCell<State>>,
@@ -132,10 +111,10 @@ pub fn create_window(app: &Application, state: &Rc<RefCell<State>>,
 
     // Fill stores
     let store_currency: ListStore = builder.get_object("store_currency").unwrap();
-    fill_store!(store_currency, CURRENCIES);
+    fill_store!(combo => store_currency, CURRENCIES);
 
     let store_type: ListStore = builder.get_object("store_type").unwrap();
-    fill_store!(store_type, PAYMENTS);
+    fill_store!(combo => store_type, PAYMENTS);
 
     // Load data
     if receipt_id >= 0 {
@@ -168,8 +147,10 @@ pub fn create_window(app: &Application, state: &Rc<RefCell<State>>,
         let builder = builder.clone();
         let info_bar: InfoBar = builder.get_object("info_bar").unwrap();
 
-        info_bar.connect_response(|bar, _| {
-            bar.hide();
+        let revealer: Revealer = builder.get_object("revealer").unwrap();
+
+        info_bar.connect_response(move |_, _| {
+            revealer.set_reveal_child(false);
         });
     }
 
@@ -208,8 +189,9 @@ pub fn create_window(app: &Application, state: &Rc<RefCell<State>>,
         let btn_save: Button = builder.get_object("btn_save").unwrap();
         let state = state.clone();
 
-        let info_bar: InfoBar = builder.get_object("info_bar").unwrap();
+        let revealer: Revealer = builder.get_object("revealer").unwrap();
         let lbl_info: Label = builder.get_object("lbl_info").unwrap();
+        let lbl_info_data: Label = builder.get_object("lbl_info_data").unwrap();
         let entry_shop: Entry = builder.get_object("entry_shop").unwrap();
         let entry_desc: TextView = builder.get_object("entry_desc").unwrap();
         let spin_cost: SpinButton = builder.get_object("spin_cost").unwrap();
@@ -243,9 +225,10 @@ pub fn create_window(app: &Application, state: &Rc<RefCell<State>>,
 
             if error_check.len() > 0 {
                 // Show information and abort saving
-                lbl_info.set_text(error_check.join(", ").as_str());
-                //FIXME
-                info_bar.show();
+                lbl_info.set_text("Check fields:");
+                lbl_info_data.set_text(error_check.join(", ").as_str());
+
+                revealer.set_reveal_child(true);
 
                 return;
             }
@@ -281,7 +264,13 @@ pub fn create_window(app: &Application, state: &Rc<RefCell<State>>,
 
             } else {
                 // Updating
-                // TODO
+                status = db::update_receipt(&state.borrow().db_path, &receipt);
+
+                // TODO check result
+                lbl_info.set_text("Receipt updated");
+                lbl_info_data.set_text("");
+
+                revealer.set_reveal_child(true);
             }
 
             //TODO check status and show infobar if error
