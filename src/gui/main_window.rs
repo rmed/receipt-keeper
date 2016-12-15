@@ -334,5 +334,5 @@ pub fn refresh_table() -> glib::Continue {
 
 // Keep builder in thread local storage to update the table
 thread_local!(
-    static REFRESH: RefCell<Option<(Builder, String)>> = RefCell::new(None);
+    static REFRESH: RefCell<Option<(Builder, String)>> = RefCell::new(None)
 );
