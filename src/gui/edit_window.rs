@@ -199,6 +199,7 @@ pub fn create_window(app: &Application, state: &Rc<RefCell<State>>,
         let combo_currency: ComboBox = builder.get_object("combo_currency").unwrap();
         let entry_date: Entry = builder.get_object("entry_date").unwrap();
         let receipt_id = receipt_id.clone();
+        let window = window.clone();
 
         btn_save.connect_clicked(move |_| {
             // Check shop, date and comboboxes
@@ -266,15 +267,29 @@ pub fn create_window(app: &Application, state: &Rc<RefCell<State>>,
                 // Updating
                 status = db::update_receipt(&state.borrow().db_path, &receipt);
 
-                // TODO check result
                 lbl_info.set_text("Receipt updated");
+                lbl_info_data.set_text("");
+            }
+
+            // Check status after saving
+            if status.unwrap() < 1 {
+                // Error, show infobar
+                lbl_info.set_text("Error storing receipt");
                 lbl_info_data.set_text("");
 
                 revealer.set_reveal_child(true);
-            }
 
-            //TODO check status and show infobar if error
-            glib::idle_add(main_window::refresh_table);
+            } else {
+                // Refresh table
+                glib::idle_add(main_window::refresh_table);
+
+                // Check if creating and close modal window
+                if receipt_id < 0 {
+                    window.close();
+                }
+
+                revealer.set_reveal_child(true);
+            }
         });
     }
 
