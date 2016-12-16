@@ -37,8 +37,13 @@ use gtk::{
     ApplicationWindow,
     Box,
     Builder,
+    ButtonsType,
+    DialogFlags,
     HeaderBar,
+    MessageDialog,
+    MessageType,
     Orientation,
+    ResponseType,
     Revealer,
     RevealerTransitionType,
     Type,
@@ -118,6 +123,43 @@ pub fn create_window(app: &Application,
         btn_new.connect_clicked(move |_| {
             let dialog = edit_window::create_window(&app, &state, -1);
             dialog.show();
+        });
+    }
+
+    // Delete selected record
+    {
+        let builder = builder.clone();
+        let app = window.get_application().unwrap();
+        let state = state.clone();
+
+        let btn_remove: Button = builder.get_object("btn_remove").unwrap();
+
+        let table_selection: TreeSelection = builder.get_object("table_selection").unwrap();
+
+        btn_remove.connect_clicked(move |_| {
+            let (model, iter) = table_selection.get_selected().unwrap();
+            let id = model.get_value(&iter, 0).get::<i32>().unwrap();
+
+            // Modal dialog
+            // FIXME
+            let dialog = MessageDialog::new(
+                None,
+                DialogFlags::empty(),
+                MessageType::Question,
+                ButtonsType::YesNo,
+                format!("Delete receipt {}", id).as_str()
+            );
+
+            let response = dialog.run();
+
+            if response == ResponseType::Yes.into() {
+                let status = db::delete_receipt(&state.borrow().db_path, id);
+
+                //TODO check result, show info
+
+                // Refresh table
+                glib::idle_add(refresh_table);
+            }
         });
     }
 
