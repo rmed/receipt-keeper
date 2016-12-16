@@ -179,7 +179,9 @@ pub fn create_window(app: &Application, state: &Rc<RefCell<State>>,
         calendar.connect_day_selected(move |calendar| {
             let (year, month, day) = calendar.get_date();
 
-            entry_date.set_text(format!("{}/{}/{}", day, month+1, year).as_str());
+            entry_date.set_text(
+                format!("{:02}/{:02}/{}", day, month+1, year).as_str()
+            );
         });
     }
 

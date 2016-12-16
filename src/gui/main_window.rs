@@ -181,10 +181,14 @@ pub fn create_window(app: &Application,
             let (year, month, day) = calendar.get_date();
 
             if popover_date.get_relative_to().unwrap().eq(&entry_date_from) {
-                entry_date_from.set_text(format!("{}/{}/{}", day, month+1, year).as_str());
+                entry_date_from.set_text(
+                    format!("{:02}/{:02}/{}", day, month+1, year).as_str()
+                );
 
             } else {
-                entry_date_to.set_text(format!("{}/{}/{}", day, month+1, year).as_str());
+                entry_date_to.set_text(
+                    format!("{:02}/{:02}/{}", day, month+1, year).as_str()
+                );
             }
         });
     }
