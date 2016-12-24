@@ -42,7 +42,7 @@ use gtk::prelude::*;
 use gtk::Application;
 
 use common::State;
-use gui::main_window;
+use gui::{main_window, settings_window};
 
 
 /// Activation signal handler
@@ -51,18 +51,25 @@ fn do_activate(app: &Application) {
     let db_path = config::read_config_file();
 
     let state: Rc<RefCell<State>> = Rc::new(RefCell::new(State {
-        db_path: db_path,
+        db_path: db_path.clone(),
         window_map: HashMap::new()
     }));
 
-    // Migrate
-    let db_version = migrations::migrate("/tmp/test.db");
-    //TODO show error if -1
+    let window;
 
-    // Add main window
-    let window = main_window::create_window(&app, &state);
+    if db_path.is_empty() {
+        // Ask for database path
+        window = settings_window::create_window(&app, &state);
+
+    } else {
+        // Migrate database and show main window
+        let db_version = migrations::migrate(db_path.as_str());
+        //TODO show error if -1
+
+        window = main_window::create_window(&app, &state);
+    }
+
     window.show_all();
-
     app.add_window(&window);
 }
 
