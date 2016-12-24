@@ -75,7 +75,7 @@ use common::{State, CURRENCIES, PAYMENTS};
 use migrations;
 use db;
 use db::Receipt;
-use gui::edit_window;
+use gui::{edit_window, settings_window};
 
 
 /// Creates the main window
@@ -127,41 +127,41 @@ pub fn create_window(app: &Application,
     }
 
     // Delete selected record
-    {
-        let builder = builder.clone();
-        let app = window.get_application().unwrap();
-        let state = state.clone();
+    // {
+    //     let builder = builder.clone();
+    //     let app = window.get_application().unwrap();
+    //     let state = state.clone();
 
-        let btn_remove: Button = builder.get_object("btn_remove").unwrap();
+    //     let btn_remove: Button = builder.get_object("btn_remove").unwrap();
 
-        let table_selection: TreeSelection = builder.get_object("table_selection").unwrap();
+    //     let table_selection: TreeSelection = builder.get_object("table_selection").unwrap();
 
-        btn_remove.connect_clicked(move |_| {
-            let (model, iter) = table_selection.get_selected().unwrap();
-            let id = model.get_value(&iter, 0).get::<i32>().unwrap();
+    //     btn_remove.connect_clicked(move |_| {
+    //         let (model, iter) = table_selection.get_selected().unwrap();
+    //         let id = model.get_value(&iter, 0).get::<i32>().unwrap();
 
-            // Modal dialog
-            // FIXME
-            let dialog = MessageDialog::new(
-                None,
-                DialogFlags::empty(),
-                MessageType::Question,
-                ButtonsType::YesNo,
-                format!("Delete receipt {}", id).as_str()
-            );
+    //         // Modal dialog
+    //         // FIXME
+    //         let dialog = MessageDialog::new(
+    //             None,
+    //             DialogFlags::empty(),
+    //             MessageType::Question,
+    //             ButtonsType::YesNo,
+    //             format!("Delete receipt {}", id).as_str()
+    //         );
 
-            let response = dialog.run();
+    //         let response = dialog.run();
 
-            if response == ResponseType::Yes.into() {
-                let status = db::delete_receipt(&state.borrow().db_path, id);
+    //         if response == ResponseType::Yes.into() {
+    //             let status = db::delete_receipt(&state.borrow().db_path, id);
 
-                //TODO check result, show info
+    //             //TODO check result, show info
 
-                // Refresh table
-                glib::idle_add(refresh_table);
-            }
-        });
-    }
+    //             // Refresh table
+    //             glib::idle_add(refresh_table);
+    //         }
+    //     });
+    // }
 
     // Toggle search box
     {
@@ -262,6 +262,19 @@ pub fn create_window(app: &Application,
             popover_menu.hide();
 
             // TODO filter results
+        });
+    }
+
+    // Show settings  dialog
+    {
+        let builder = builder.clone();
+        let app = window.get_application().unwrap();
+        let state = state.clone();
+        let btn_settings: Button = builder.get_object("btn_settings").unwrap();
+
+        btn_settings.connect_clicked(move |_| {
+            let dialog = settings_window::create_window(&app, &state);
+            dialog.show();
         });
     }
 

@@ -41,3 +41,4 @@ macro_rules! set_active_combo {
 
 pub mod main_window;
 pub mod edit_window;
+pub mod settings_window;

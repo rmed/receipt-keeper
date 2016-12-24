@@ -59,3 +59,16 @@ fn create_empty_config(conf_path: &PathBuf) {
 
     conf.write_to_file(conf_path.to_str().unwrap()).unwrap();
 }
+
+/// Write configuration to file
+pub fn write_config_file(state: &State) {
+    let mut conf_path = env::home_dir().unwrap();
+    conf_path.push(".receipt-keeper");
+
+    let mut conf = Ini::new();
+
+    conf.with_section(Some("DB".to_owned()))
+        .set("path", state.db_path.clone());
+
+    conf.write_to_file(conf_path.to_str().unwrap()).unwrap();
+}
